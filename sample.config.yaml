@@ -1,0 +1,5 @@
+configurationset:
+  - configuration:
+      name: curl_import_config
+      authorization_21309c1eb4: Bearer
+        <AUTH TOKEN HERE>

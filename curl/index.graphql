@@ -1,0 +1,169 @@
+type Genre {
+  id: Int
+  name: String
+}
+
+type Company {
+  id: Int
+  name: String
+  logo_path: String
+  origin_country: String
+}
+
+type Country {
+  iso_3166_1: String
+  name: String
+}
+
+type Language {
+  iso_639_1: String
+  name: String
+}
+
+type ImageFile {
+  aspect_ratio: Int
+  height: Int
+  iso_639_1: String
+  file_path: String
+  vote_average: Int
+  vote_count: Int
+  width: Int
+}
+
+type Images {
+  backdrops: [ImageFile]
+  logos: [ImageFile]
+  posters: [ImageFile]
+}
+
+type VideoLink {
+  iso_639_1: String
+  iso_3166_1: String
+  name: String
+  key: String
+  site: String
+  size: Int
+  type: String
+  official: Boolean
+  published_at: String
+  id: String
+}
+
+type Videos {
+  results: [VideoLink]
+}
+
+type Cast {
+  adult: Boolean
+  gender: Int
+  id: Int
+  known_for_department: String
+  name: String
+  original_name: String
+  popularity: Int
+  profile_path: String
+  cast_id: Int,
+  character: String
+  credit_id: String
+  order: Int
+}
+
+type Crew {
+  adult: Boolean
+  gender: Int
+  id: Int
+  known_for_department: String
+  name: String
+  original_name: String
+  popularity: Int
+  profile_path: String
+  credit_id: String
+  department: String
+  job: String
+}
+
+type Credits {
+  cast: [Cast]
+  crew: [Crew]
+}
+
+type SimilarMovies {
+  results: [ListItem]
+}
+
+type Movie {
+  adult: Boolean
+  backdrop_path: String
+  belongs_to_collection: String
+  budget: Int
+  genres: [Genre]
+  homepage: String
+  id: Int
+  imdb_id: String
+  original_language: String
+  original_title: String
+  overview: String
+  popularity: Int
+  poster_path: String
+  production_companies: [Company]
+  production_countries: [Country]
+  release_data: String
+  revenue: Int
+  runtime: Int
+  spoken_languages: [Language]
+  status: String
+  tagline: String
+  title: String
+  video: Boolean
+  vote_average: Int
+  vote_count: Int
+  images: Images
+  videos: Videos
+  credits: Credits
+  similar: SimilarMovies
+}
+
+type ListItem {
+  adult: Boolean
+  backdrop_path: String
+  first_air_date: Date
+  genre_ids: [Int]
+  id: Int!
+  media_type: String
+  name: String
+  origin_country: [String]
+  original_language: String
+  original_name: String
+  original_title: String
+  overview: String
+  popularity: Float
+  poster_path: String
+  release_date: Date
+  title: String
+  video: Boolean
+  vote_average: Float
+  vote_count: Int
+}
+
+type TrendingResult {
+  page: Int
+  results: [ListItem]
+  total_pages: Int
+  total_results: Int
+}
+
+type Query {
+  movieDetails(movieId: Int!): Movie
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/$movieId?append_to_response=images,videos,credits,similar"
+      headers: [{ name: "authorization", value: "$authorization_21309c1eb4;" }]
+      configuration: "curl_import_config"
+    )
+  trendingMovies(mediaType: String!, timeWindow: String!): TrendingResult
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/trending/$mediaType/$timeWindow"
+      headers: [{ name: "authorization", value: "$authorization_21309c1eb4;" }]
+      configuration: "curl_import_config"
+    )
+  
+}
