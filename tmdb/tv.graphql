@@ -1,0 +1,8 @@
+type Query {
+  personDetails(movieId: Int!): Movie
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/$movieId?append_to_response=images,videos,credits,similar"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+    )
+}

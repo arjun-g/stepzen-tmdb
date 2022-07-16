@@ -1,3 +1,10 @@
-schema @sdl(files: ["curl/index.graphql"]) {
+schema 
+  @sdl(
+    files: [
+      "tmdb/common.graphql",
+      "tmdb/movies.graphql",
+      "tmdb/index.graphql"
+    ]
+  ) {
   query: Query
 }

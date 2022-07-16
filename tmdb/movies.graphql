@@ -1,0 +1,140 @@
+
+type Credits {
+  cast: [Cast]
+  crew: [Crew]
+}
+
+type SimilarMovies {
+  results: [ListItem]
+}
+
+type Movie {
+  adult: Boolean
+  backdrop_path: String
+  belongs_to_collection: String
+  budget: Int
+  genres: [Genre]
+  homepage: String
+  id: Int!
+  added: String
+  imdb_id: String
+  original_language: String
+  original_title: String
+  overview: String
+  popularity: Int
+  poster_path: String
+  production_companies: [Company]
+  production_countries: [Country]
+  release_data: Date
+  revenue: Int
+  runtime: Int
+  spoken_languages: [Language]
+  status: String
+  tagline: String
+  title: String
+  video: Boolean
+  vote_average: Int
+  vote_count: Int
+}
+
+extend type Movie {
+    images: Images @materializer (query: "movieImages", arguments: [{name: "movieId", field: "id"}])
+    videos: [VideoLink] @materializer (query: "movieVideos", arguments: [{name: "movieId", field: "id"}])
+    credits: Credits @materializer (query: "movieCredits", arguments: [{name: "movieId", field: "id"}])
+    social: SocialLinks @materializer (query: "socialLinks", arguments: [{name: "movieId", field: "id"}])
+    similar: [ListItem] @materializer (query: "similarMovies", arguments: [{name: "movieId", field: "id"}])
+}
+
+type ListItem {
+  adult: Boolean
+  backdrop_path: String
+  first_air_date: Date
+  genre_ids: [Int]
+  id: Int!
+  media_type: String
+  name: String
+  origin_country: [String]
+  original_language: String
+  original_name: String
+  original_title: String
+  overview: String
+  popularity: Float
+  poster_path: String
+  release_date: Date
+  title: String
+  video: Boolean
+  vote_average: Float
+  vote_count: Int
+}
+
+type TrendingResult {
+  page: Int
+  results: [ListItem]
+  total_pages: Int
+  total_results: Int
+}
+
+type Query {
+  movieDetails(movieId: Int!): Movie
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/$movieId"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+    )
+  movieImages(movieId: Int!) : Images
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/$movieId/images"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+      transforms: [
+        {pathpattern:["backdrops"],editor:"jq:.[]|.+={ file: { original: \"https://image.tmdb.org/t/p/original\\(.file_path)\", large: \"https://image.tmdb.org/t/p/w1280\\(.file_path)\", medium: \"https://image.tmdb.org/t/p/w780\\(.file_path)\", small: \"https://image.tmdb.org/t/p/w300\\(.file_path)\" } }"}
+      ]
+    )
+  movieVideos(movieId: Int!) : [VideoLink]
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/$movieId/videos"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+      resultroot: "results[]"
+    )
+  movieCredits(movieId: Int!) : Credits
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/$movieId/credits"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+    )
+  similarMovies(movieId: Int!) : [ListItem]
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/$movieId/similar"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+      resultroot: "results[]"
+    )
+  socialLinks(movieId: Int!): SocialLinks
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/$movieId/external_ids"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+      ecmascript: """
+        function transformREST(s){
+            let result = JSON.parse(s);
+            let output = {};
+            if(result.imdb_id)
+                output.imdb = `https://www.imdb.com/title/${result.imdb_id}/`;
+            if(result.facebook_id)
+                output.facebook = `https://www.facebook.com/${result.facebook_id}`;
+            if(result.instagram_id)
+                output.instagram = `https://www.instagram.com/${result.instagram_id}`;
+            if(result.twitter_id)
+                output.twitter = `https://twitter.com/${result.twitter_id}`;
+            return output;
+        }
+      """
+    )
+  trendingMovies(mediaType: String!, timeWindow: String!): TrendingResult
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/trending/$mediaType/$timeWindow"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+    )
+}
