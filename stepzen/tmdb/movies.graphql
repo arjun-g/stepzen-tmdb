@@ -58,18 +58,13 @@ type ListItem {
   overview: String
   popularity: Float
   poster_path: String
+  poster: JSON
   release_date: Date
+  first_air_date: Date
   title: String
   video: Boolean
   vote_average: Float
   vote_count: Int
-}
-
-type TrendingResult {
-  page: Int
-  results: [ListItem]
-  total_pages: Int
-  total_results: Int
 }
 
 type Query {
@@ -131,10 +126,24 @@ type Query {
         }
       """
     )
-  trendingMovies(mediaType: MediaType!, timeWindow: TimeWindow!): TrendingResult
+  trending(mediaType: MediaType!, timeWindow: TimeWindow!): [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/trending/$mediaType/$timeWindow"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
+      transforms: [
+        {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
+      ]
+      resultroot: "results[]"
+    )
+  nowPlaying: [ListItem]
+    @rest(
+      endpoint: "https://api.themoviedb.org/3/movie/now_playing"
+      headers: [{ name: "authorization", value: "$authorization;" }]
+      configuration: "curl_import_config"
+      transforms: [
+        {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
+      ]
+      resultroot: "results[]"
     )
 }

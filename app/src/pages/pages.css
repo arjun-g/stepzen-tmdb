@@ -1,0 +1,14 @@
+.page{
+    padding: 32px 0;
+    height: 100%;
+    flex: 0 0 100%;
+    overflow-y: hidden;
+}
+
+.pagecontent{
+    height: 100%;
+    overflow-y: auto;
+    padding: 32px 64px;
+    scrollbar-gutter: 10px;
+    padding-right: 54px;
+}

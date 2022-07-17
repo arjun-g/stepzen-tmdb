@@ -1,0 +1,155 @@
+.App{
+  display: flex;
+  height: 100%;
+}
+
+.leftnav{
+  padding-top: 32px;
+  padding-left: 32px;
+  flex: 0 0 240px;
+  border-right: 1px solid var(--border-color);
+  height: 100%;
+}
+
+.leftnav .menusection{
+  margin-bottom: 40px;
+}
+
+.leftnav .menusection ul{
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.leftnav .menusection ul li{
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.leftnav .menusection ul a{
+  text-decoration: none;
+  color: var(--txt-color);
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.leftnav .menusection ul a.active{
+  font-weight: 600;
+  position: relative;
+}
+
+.leftnav .menusection ul a.active:after{
+  content: "";
+  display: block;
+  width: 4px;
+  height: calc(100% - 12px);
+  position: absolute;
+  right: 0;
+  top: 6px;
+  background-color: var(--accent-color-1);
+  border-radius: 10px;
+}
+
+.leftnav .menusection ul a:hover{
+  color: var(--txt-color-active);
+}
+
+.leftnav .menusection ul a span{
+  line-height: 1;
+  margin-right: 12px;
+}
+
+.leftnav .menusection ul a.active span{
+  color: var(--accent-color-1);
+}
+
+.leftnav .genres{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-right: 32px;
+  margin-top: 24px;
+}
+
+.leftnav .genres .genretag{
+  display: flex;
+  width: 50%;
+  flex: 0 0 60px;
+  align-items: center;
+  justify-content: center;
+  color: var(--txt-color-active);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 6px 8px;
+  white-space: nowrap;
+  border-radius: 4px;
+}
+
+.content{
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar{
+  flex: 0 0 240px;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  overflow-y: scroll;
+  padding: 32px;
+}
+
+.sidebar ul{
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  gap: 16px;
+}
+
+.sidebar ul li{
+  width: 100%;
+}
+
+.sidebar ul li a{
+  display: flex;
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sidebar ul li a img{
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.sidebar ul li a .caption{
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 75%, rgba(0,0,0,0) 100%);
+  background-position: top;
+  background-size: 100% 100px;
+  color: rgba(255, 255, 255, 1);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar ul li a .caption .release{
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 10px;
+}
+
+.sidebar ul li a:hover img{
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
