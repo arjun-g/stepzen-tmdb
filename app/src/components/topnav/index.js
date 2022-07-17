@@ -14,7 +14,7 @@ export function TopNav(props){
                 <Link to={`${path}?media=tv`} className={query.media === "tv" && "active"}>TV</Link>
             </li>
             <li>
-                <Link to={`${path}?media=actor`} className={query.media === "actor" && "active"}>Actor</Link>
+                <Link to={`${path}?media=person`} className={query.media === "person" && "active"}>Actors</Link>
             </li>
         </ul>
         <div className="search">

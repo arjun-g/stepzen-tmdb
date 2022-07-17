@@ -59,8 +59,9 @@ type ListItem {
   popularity: Float
   poster_path: String
   poster: JSON
+  profile_path: String
+  profile: JSON
   release_date: Date
-  first_air_date: Date
   title: String
   video: Boolean
   vote_average: Float
@@ -133,6 +134,7 @@ type Query {
       configuration: "curl_import_config"
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
+        {pathpattern:["results"],editor:"jq:.[]|.+={ profile: { original: \"https://image.tmdb.org/t/p/original\\(.profile_path)\", large: \"https://image.tmdb.org/t/p/w300\\(.profile_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.profile_path)\", small: \"https://image.tmdb.org/t/p/w45\\(.profile_path)\" } }"}
       ]
       resultroot: "results[]"
     )

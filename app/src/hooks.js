@@ -22,12 +22,21 @@ export function useTrending(media){
         id
         name
         title
+        poster_path
         poster
+        profile_path
+        profile
         release_date
         first_air_date
+        media_type
       }
     }`).then(resp => {
-        setItems(resp.data.trending)
+        setItems(resp.data.trending.filter(trend => {
+          if(trend.media_type === "person" && !trend.profile_path){
+            return false;
+          }
+          return true;
+        }))
     })
   }, [query.media]);
   return items;

@@ -23,7 +23,6 @@
     bottom: 0;
     color: var(--txt-color);
     padding: 8px;
-    padding-left: 50px;
 }
 .itemcard .content .title{
     overflow: hidden;
