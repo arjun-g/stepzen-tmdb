@@ -20,22 +20,29 @@ type Language {
   name: String
 }
 
-type ImageFile {
+type ImageEntry {
   aspect_ratio: Float
   height: Int
   iso_639_1: String
   file_path: String
+  file: ImageFile
   vote_average: Int
   vote_count: Int
   width: Int
   added: String
-  file: JSON
+}
+
+type ImageFile{
+    original: String
+    large: String
+    medium: String
+    small: String
 }
 
 type Images {
-  backdrops: [ImageFile]
-  logos: [ImageFile]
-  posters: [ImageFile]
+  backdrops: [ImageEntry]
+  logos: [ImageEntry]
+  posters: [ImageEntry]
 }
 
 type VideoLink {
@@ -85,4 +92,16 @@ type SocialLinks{
     facebook: String
     instagram: String
     twitter: String
+}
+
+enum MediaType{
+    all
+    movie
+    tv
+    person
+}
+
+enum TimeWindow{
+    day
+    week
 }

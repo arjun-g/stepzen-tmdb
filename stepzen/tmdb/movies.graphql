@@ -16,8 +16,6 @@ type Movie {
   genres: [Genre]
   homepage: String
   id: Int!
-  added: String
-  imdb_id: String
   original_language: String
   original_title: String
   overview: String
@@ -75,7 +73,7 @@ type TrendingResult {
 }
 
 type Query {
-  movieDetails(movieId: Int!): Movie
+  movie(movieId: Int!): Movie
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId"
       headers: [{ name: "authorization", value: "$authorization;" }]
@@ -88,6 +86,8 @@ type Query {
       configuration: "curl_import_config"
       transforms: [
         {pathpattern:["backdrops"],editor:"jq:.[]|.+={ file: { original: \"https://image.tmdb.org/t/p/original\\(.file_path)\", large: \"https://image.tmdb.org/t/p/w1280\\(.file_path)\", medium: \"https://image.tmdb.org/t/p/w780\\(.file_path)\", small: \"https://image.tmdb.org/t/p/w300\\(.file_path)\" } }"}
+        {pathpattern:["logos"],editor:"jq:.[]|.+={ file: { original: \"https://image.tmdb.org/t/p/original\\(.file_path)\", large: \"https://image.tmdb.org/t/p/w500\\(.file_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.file_path)\", small: \"https://image.tmdb.org/t/p/w92\\(.file_path)\" } }"}
+        {pathpattern:["posters"],editor:"jq:.[]|.+={ file: { original: \"https://image.tmdb.org/t/p/original\\(.file_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.file_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.file_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.file_path)\" } }"}
       ]
     )
   movieVideos(movieId: Int!) : [VideoLink]
@@ -131,7 +131,7 @@ type Query {
         }
       """
     )
-  trendingMovies(mediaType: String!, timeWindow: String!): TrendingResult
+  trendingMovies(mediaType: MediaType!, timeWindow: TimeWindow!): TrendingResult
     @rest(
       endpoint: "https://api.themoviedb.org/3/trending/$mediaType/$timeWindow"
       headers: [{ name: "authorization", value: "$authorization;" }]
