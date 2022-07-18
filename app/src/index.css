@@ -42,12 +42,14 @@ code {
 /* Firefox */
 * {
   scrollbar-width: thin;
+  scrollbar-height: thin;
   scrollbar-color: #28242b #191b1f;
 }
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 *::-webkit-scrollbar-track {
@@ -109,5 +111,5 @@ ul{
 
 .glass-background{
   backdrop-filter: blur(10px);
-  background-color: rgba(34, 83, 255, 0.25);
+  background-color: rgba(34, 83, 255, 0.45);
 }

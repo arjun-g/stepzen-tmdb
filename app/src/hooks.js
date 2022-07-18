@@ -46,6 +46,54 @@ export function useTrending(media){
   return items;
 }
 
+export function usePopular(){
+  const [items, setItems] = useState([]);
+  const query = useQuery();
+  useEffect(() => {
+    fetchGQL(`{
+      popular(mediaType: ${query.media || 'movie'}) {
+        id
+        name
+        title
+        poster_path
+        poster
+        profile_path
+        profile
+        release_date
+        first_air_date
+        media_type
+      }
+    }`).then(resp => {
+        setItems(removeNull(resp.data.popular))
+    })
+  }, [query.media]);
+  return items;
+}
+
+export function useTopRated(){
+  const [items, setItems] = useState([]);
+  const query = useQuery();
+  useEffect(() => {
+    fetchGQL(`{
+      topRated(mediaType: ${query.media || 'movie'}) {
+        id
+        name
+        title
+        poster_path
+        poster
+        profile_path
+        profile
+        release_date
+        first_air_date
+        media_type
+      }
+    }`).then(resp => {
+        setItems(removeNull(resp.data.topRated))
+    })
+  }, [query.media]);
+  return items;
+}
+
 export function useNowPlaying(){
   const [items, setItems] = useState([]);
   const query = useQuery();
@@ -55,10 +103,15 @@ export function useNowPlaying(){
       fetchGQL(`{
         ontheAir {
           id
-          poster_path
           name
           title
+          poster_path
           poster
+          profile_path
+          profile
+          release_date
+          first_air_date
+          media_type
         }
       }`).then(resp => {
           if(resp.data)
@@ -69,11 +122,15 @@ export function useNowPlaying(){
       fetchGQL(`{
         nowPlaying {
           id
-          poster_path
           name
           title
+          poster_path
           poster
+          profile_path
+          profile
           release_date
+          first_air_date
+          media_type
         }
       }`).then(resp => {
           if(resp.data)
@@ -81,6 +138,46 @@ export function useNowPlaying(){
       })
     }
   }, [query.media]);
+  return items;
+}
+
+export function useGenres(){
+  const [items, setItems] = useState([]);
+  const query = useQuery();
+  useEffect(() => {
+    fetchGQL(`{
+      genres(mediaType: ${query.media || 'movie'}) {
+        id
+        name
+      }
+    }`).then(resp => {
+        setItems(removeNull(resp.data.genres))
+    })
+  }, [query.media]);
+  return items;
+}
+
+export function useByGenres(genres){
+  const [items, setItems] = useState([]);
+  const query = useQuery();
+  useEffect(() => {
+    fetchGQL(`{
+      byGenres(mediaType: ${query.media || 'movie'}, genres: "${genres}") {
+        id
+        name
+        title
+        poster_path
+        poster
+        profile_path
+        profile
+        release_date
+        first_air_date
+        media_type
+      }
+    }`).then(resp => {
+        setItems(removeNull(resp.data.byGenres))
+    })
+  }, [query.media, genres]);
   return items;
 }
 
@@ -127,6 +224,16 @@ export function useMovie(movieId){
         }
         overview
         release_date
+        similar {
+          id
+          name
+          title
+          media_type
+          poster_path
+          poster
+          release_date
+          first_air_date
+        }
         credits {
           cast {
             id
@@ -147,6 +254,10 @@ export function useMovie(movieId){
             profile_path
             gender
             department
+            profile {
+              large
+              medium
+            }
           }
         }
       }

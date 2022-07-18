@@ -113,6 +113,9 @@ type Query {
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
       cachepolicy: { strategy: OFF }
+      transforms: [
+        {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
+      ]
       resultroot: "results[]"
     )
   socialLinks(movieId: Int!): SocialLinks
@@ -137,18 +140,6 @@ type Query {
         }
       """
     )
-  trending(mediaType: MediaType!, timeWindow: TimeWindow!): [ListItem]
-    @rest(
-      endpoint: "https://api.themoviedb.org/3/trending/$mediaType/$timeWindow"
-      headers: [{ name: "authorization", value: "$authorization;" }]
-      configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
-      transforms: [
-        {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
-        {pathpattern:["results"],editor:"jq:.[]|.+={ profile: { original: \"https://image.tmdb.org/t/p/original\\(.profile_path)\", large: \"https://image.tmdb.org/t/p/w300\\(.profile_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.profile_path)\", small: \"https://image.tmdb.org/t/p/w45\\(.profile_path)\" } }"}
-      ]
-      resultroot: "results[]"
-    )
   nowPlaying: [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/now_playing"
@@ -157,7 +148,9 @@ type Query {
       cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
+        {pathpattern:["results"],editor:"jq:.[]|.+={ media_type: \"movie\" }"}
       ]
       resultroot: "results[]"
     )
+  
 }

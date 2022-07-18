@@ -1,0 +1,22 @@
+.genres{
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.genres > li{
+    
+}
+
+.genres > li a{
+    color: var(--txt-color);
+    text-decoration: none;
+    padding: 4px 12px;
+    display: inline-flex;
+    border: 2px solid var(--txt-color);
+    border-radius: 8px;
+}
+
+.genres > li a.active{
+    background-color: var(--accent-color-3);
+}

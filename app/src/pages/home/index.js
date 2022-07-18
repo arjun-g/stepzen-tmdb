@@ -7,6 +7,7 @@ import { Grid } from "../../components/grid";
 export function Home(props){
     const trending = useTrending();
      return <Page>
+        <h2>Trending</h2>
         <Grid items={trending} />
     </Page>
 }

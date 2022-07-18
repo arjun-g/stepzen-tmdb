@@ -7,6 +7,7 @@ type Query {
       cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
+        {pathpattern:["results"],editor:"jq:.[]|.+={ media_type: \"tv\" }"}
       ]
       resultroot: "results[]"
     )

@@ -5,6 +5,10 @@ import { Home } from "./pages/home";
 import dayjs from "dayjs";
 import { useTrending, useNowPlaying, useQuery } from "./hooks";
 import { Movie } from "./pages/movie";
+import { Popular } from "./pages/popular";
+import { TopRated } from "./pages/toprated";
+import { ByGenre } from "./pages/genres";
+import { ItemCard } from "./components/itemcard";
 
 function App() {
   const nowPlaying = useNowPlaying();
@@ -22,15 +26,9 @@ function App() {
                 </Link>
               </li>
               <li>
-                <Link to={"/trending"}>
-                  <span className="material-symbols-outlined">trending_up</span>{" "}
-                  Trending
-                </Link>
-              </li>
-              <li>
-                <Link to={"/upcoming"}>
+                <Link to={"/popular"}>
                   <span className="material-symbols-outlined">update</span>{" "}
-                  Upcoming
+                  Popular
                 </Link>
               </li>
               <li>
@@ -39,27 +37,30 @@ function App() {
                   Rated
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to={"/discover"}>
                   <span className="material-symbols-outlined">
                     travel_explore
                   </span>{" "}
                   Discover
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
           <div className="menusection">
             <span className="title txt-bold">POPULAR GENRES</span>
             <div className="genres">
-              {GENRES.map((genre, i) => <Link to={genre.id} className={`genretag`} style={{ backgroundColor: `var(--accent-color-${(i % 4) + 1})` }}>{genre.name}</Link>)}
+              {GENRES.map((genre, i) => <Link to={`/genre/${genre.id}`} className={`genretag`} style={{ backgroundColor: `var(--accent-color-${(i % 4) + 1})` }}>{genre.name}</Link>)}
             </div>
           </div>
         </nav>
         <section className="content">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/popular" element={<Popular />} />
+            <Route path="/top-rated" element={<TopRated />} />
+            <Route path="/genre/:genreId" element={<ByGenre />} />
             <Route path="/movie/:movieId" element={<Movie />} />
           </Routes>
         </section>
@@ -68,13 +69,7 @@ function App() {
           <ul>
           {nowPlaying.map(item => {
             return <li key={item.id}>
-              <Link to={`/movie/${item.id}`}>
-                  <img src={item.poster.small} alt={`${item.name || item.title} Poster`} loading="lazy" />
-                  <div className="caption">
-                    <span className="title txt-bold">{item.name || item.title}</span>
-                    {(!query.media || query.media === "movie") && <span className="release">Released On {dayjs(item.release_date).format("DD MMMM")}</span>}
-                  </div>
-              </Link>
+              <ItemCard item={item} />
             </li>
           })}
           </ul>

@@ -24,6 +24,8 @@
     bottom: 0;
     color: var(--txt-color);
     padding: 8px;
+    display: flex;
+    flex-direction: column;
 }
 .itemcard .content .title{
     overflow: hidden;
