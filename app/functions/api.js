@@ -1,8 +1,7 @@
 export async function onRequestPost({ request, env }) {
-    // const newRequest = new Request("https://lakebluff.stepzen.net/api/tmdb/__graphql", request);
-    // request.headers.set("Authorization", `Apikey ${env.STEPZEN_API_KEY}`);
-    // return await fetch(newRequest);
-    return new Response(JSON.stringify(env));
+    const newRequest = new Request("https://lakebluff.stepzen.net/api/tmdb/__graphql", request);
+    newRequest.headers.set("Authorization", `Apikey ${env.STEPZEN_API_KEY}`);
+    return await fetch(newRequest);
 }
 
 const corsHeaders = {
