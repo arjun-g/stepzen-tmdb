@@ -1,10 +1,11 @@
 export async function fetchGQL(query){
     const resp = await fetch(
-        "https://lakebluff.stepzen.net/api/tmdb/__graphql",
+        `${process.env.REACT_APP_API_URL}`,
         {
             method: "POST",
             headers: {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "Authorization": process.env.REACT_APP_STEPZEN_KEY || undefined
             },
             body: JSON.stringify({ query })
         }

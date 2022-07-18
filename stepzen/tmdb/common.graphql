@@ -67,6 +67,7 @@ type Cast {
   original_name: String
   popularity: Int
   profile_path: String
+  profile: ImageFile
   cast_id: Int,
   character: String
   credit_id: String
@@ -82,6 +83,7 @@ type Crew {
   original_name: String
   popularity: Int
   profile_path: String
+  profile: ImageFile
   credit_id: String
   department: String
   job: String

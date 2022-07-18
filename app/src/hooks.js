@@ -83,3 +83,12 @@ export function useNowPlaying(){
   }, [query.media]);
   return items;
 }
+
+export function useMovie(movieId){
+  const [loading, setLoading] = useState(true);
+  const [movie, setMovie] = useState(null);
+  useEffect(() => {
+    
+  }, [movieId])
+  return { loading, movie }
+}
