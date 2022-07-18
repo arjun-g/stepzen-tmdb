@@ -5,7 +5,7 @@ export async function fetchGQL(query){
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                "Authorization": process.env.REACT_APP_STEPZEN_KEY || undefined
+                "Authorization": process.env.REACT_APP_STEPZEN_KEY ? `Apikey ${process.env.REACT_APP_STEPZEN_KEY}` : undefined
             },
             body: JSON.stringify({ query })
         }
