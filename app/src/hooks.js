@@ -13,6 +13,10 @@ export function usePath(){
   return pathname;
 }
 
+function removeNull(arr){
+  return (arr || []).filter(item => !!item);
+}
+
 export function useTrending(media){
   const [items, setItems] = useState([]);
   const query = useQuery();
@@ -31,7 +35,7 @@ export function useTrending(media){
         media_type
       }
     }`).then(resp => {
-        setItems(resp.data.trending.filter(trend => {
+        setItems(removeNull(resp.data.trending).filter(trend => {
           if(trend.media_type === "person" && !trend.profile_path){
             return false;
           }
@@ -58,7 +62,7 @@ export function useNowPlaying(){
         }
       }`).then(resp => {
           if(resp.data)
-            setItems(resp.data?.ontheAir || [])
+            setItems(removeNull(resp.data?.ontheAir) || [])
       })
     }
     else{
@@ -73,7 +77,7 @@ export function useNowPlaying(){
         }
       }`).then(resp => {
           if(resp.data)
-            setItems(resp.data?.nowPlaying || [])
+            setItems(removeNull(resp.data?.nowPlaying) || [])
       })
     }
   }, [query.media]);
