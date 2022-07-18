@@ -4,9 +4,9 @@ export async function onRequestPost({ request, env }) {
     "https://lakebluff.stepzen.net/api/tmdb/__graphql",
     request
   );
-  newRequest.headers.set('Origin', url.origin);
   newRequest.headers.set("Authorization", `Apikey ${env.STEPZEN_API_KEY}`);
   let response = await fetch(newRequest);
+  response = new Response(response.body, response);
   response.headers.set("Access-Control-Allow-Origin", "*");
   response.headers.set("Access-Control-Allow-Methods", "GET,HEAD,POST,OPTIONS");
   response.headers.set("Access-Control-Max-Age", "86400");
