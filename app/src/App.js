@@ -1,9 +1,10 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import { GENRES } from "./constants";
 import "./App.css";
 import { Home } from "./pages/home";
 import dayjs from "dayjs";
 import { useTrending, useNowPlaying, useQuery } from "./hooks";
+import { Movie } from "./pages/movie";
 
 function App() {
   const nowPlaying = useNowPlaying();
@@ -57,7 +58,10 @@ function App() {
           </div>
         </nav>
         <section className="content">
-          <Home />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/movie/:movieId" element={<Movie />} />
+          </Routes>
         </section>
         <section className="sidebar">
           <span className="title txt-heading-2">Now Playing</span>
@@ -65,7 +69,7 @@ function App() {
           {nowPlaying.map(item => {
             return <li key={item.id}>
               <Link to={`/movie/${item.id}`}>
-                  <img src={item.poster.small} alt={`${item.name || item.title} Poster`} />
+                  <img src={item.poster.small} alt={`${item.name || item.title} Poster`} loading="lazy" />
                   <div className="caption">
                     <span className="title txt-bold">{item.name || item.title}</span>
                     {(!query.media || query.media === "movie") && <span className="release">Released On {dayjs(item.release_date).format("DD MMMM")}</span>}

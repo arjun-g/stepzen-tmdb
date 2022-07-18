@@ -1,0 +1,24 @@
+.movie{
+
+}
+
+.movie .banner{
+    height: 400px;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+}
+
+.movie .banner .overlay{
+    background-color: rgba(0, 0, 0, 0.9);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.movie .banner .content{
+    display: flex;
+}

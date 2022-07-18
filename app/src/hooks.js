@@ -88,7 +88,73 @@ export function useMovie(movieId){
   const [loading, setLoading] = useState(true);
   const [movie, setMovie] = useState(null);
   useEffect(() => {
-    
+    setLoading(true);
+    fetchGQL(`{
+      movie(movieId: ${movieId}) {
+        id
+        title
+        tagline
+        videos {
+          id
+          site
+          size
+          key
+          name
+        }
+        runtime
+        genres {
+          id
+          name
+        }
+        homepage
+        images {
+          posters {
+            aspect_ratio
+            file {
+              large
+              medium
+              small
+            }
+          }
+          backdrops {
+            file {
+              large
+              medium
+              small
+            }
+            aspect_ratio
+          }
+        }
+        overview
+        release_date
+        credits {
+          cast {
+            id
+            name
+            profile_path
+            character
+            gender
+            order
+            profile {
+              large
+              medium
+            }
+          }
+          crew {
+            id
+            job
+            name
+            profile_path
+            gender
+            department
+          }
+        }
+      }
+    }`).then(resp => {
+      setLoading(false);
+      if(resp.data.movie)
+        setMovie(resp.data.movie);
+    })
   }, [movieId])
   return { loading, movie }
 }
