@@ -1,6 +1,6 @@
 export async function fetchGQL(query){
     const resp = await fetch(
-        "https://lakebluff.stepzen.net/api/tmdb/__graphql",
+        "https://stepzen-tmdb.pages.dev/api",
         {
             method: "POST",
             headers: {
