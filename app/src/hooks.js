@@ -249,7 +249,9 @@ export function useMovie(movieId){
         overview
         release_date
         is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-        favourites
+        favourites{
+          count
+        }
         similar {
           id
           name
@@ -260,7 +262,9 @@ export function useMovie(movieId){
           release_date
           first_air_date
           is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-          favourites
+          favourites{
+            count
+          }
         }
         credits {
           cast {
@@ -275,7 +279,9 @@ export function useMovie(movieId){
               medium
             }
             is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-            favourites
+            favourites{
+              count
+            }
           }
           crew {
             id

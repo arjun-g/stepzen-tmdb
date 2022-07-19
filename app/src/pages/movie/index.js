@@ -1,15 +1,23 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Page } from "..";
 import { useMovie } from "../../hooks";
 import dayjs from "dayjs";
 import "./movie.css";
-import { runtimeString } from "../../utils";
+import { runtimeString, } from "../../utils";
 import { Grid } from "../../components/grid";
 import { ItemCard } from "../../components/itemcard";
+import { fetchGQL } from "../../service";
 
 export function Movie(props){
     const params = useParams();
     const { loading, movie } = useMovie(params.movieId);
+    const [favourites, setFavourites] = useState(0);
+    useEffect(() => {
+        if(movie){
+            setFavourites(movie.favourites.count);
+        }
+    }, [movie])
     return <Page>
         {!loading && movie && <div className="movie">
             <div className="banner" style={{ backgroundImage: `url(${movie.images.backdrops[0].file.large})` }}>
@@ -17,6 +25,36 @@ export function Movie(props){
                 <div className="content">
                     <div className="poster">
                         <img src={movie.images.posters[0].file.medium} alt="Poster"/>
+                        <div className={`fav ${movie.is_favourite ? "active" : ""}`}>
+                            <button onClick={e => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if(!movie.is_favourite){
+                                    fetchGQL(`{
+                                        favourite(mediaId: "${movie.id}", userId: "${localStorage.getItem("tmdb.userId")}") {
+                                        count
+                                        }
+                                    }`).then(resp => {
+                                        movie.is_favourite = true;
+                                        setFavourites(resp.data.favourite.count);
+                                    });
+                                }
+                                else{
+                                    fetchGQL(`{
+                                        unfavourite(mediaId: "${movie.id}", userId: "${localStorage.getItem("tmdb.userId")}") {
+                                        count
+                                        }
+                                    }`).then(resp => {
+                                        movie.is_favourite = false;
+                                        setFavourites(resp.data.unfavourite.count);
+                                    });
+                                }
+                                
+                            }}>
+                                <span className="material-symbols-outlined heart">favorite</span>
+                                {!!favourites && <span className="count">{favourites}</span>}
+                            </button>
+                        </div>
                     </div>
                     <div className="details">
                         <h1 className="txt-heading-1">{movie.name || movie.title} ({movie.release_date && <span className="year">{dayjs(movie.release_date).format("YYYY")}</span>}
