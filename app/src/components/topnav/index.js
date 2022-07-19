@@ -17,9 +17,9 @@ export function TopNav(props){
                 {(window.location.pathname === "/" || window.location.pathname === "/popular") && <Link to={`${path}?media=person`} className={query.media === "person" && "active"}>Actors</Link>}
             </li>
         </ul>
-        <div className="search">
+        {/* <div className="search">
             <span className="material-symbols-outlined">search</span>
             <input type="text" placeholder="Search for movies, tv and/or actors" />
-        </div>
+        </div> */}
     </div>
 }

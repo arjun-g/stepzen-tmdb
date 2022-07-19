@@ -33,6 +33,8 @@ export function useTrending(media){
         release_date
         first_air_date
         media_type
+        is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+        favourites
       }
     }`).then(resp => {
         setItems(removeNull(resp.data.trending).filter(trend => {
@@ -62,6 +64,8 @@ export function usePopular(){
         release_date
         first_air_date
         media_type
+        is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+        favourites
       }
     }`).then(resp => {
         setItems(removeNull(resp.data.popular))
@@ -86,6 +90,8 @@ export function useTopRated(){
         release_date
         first_air_date
         media_type
+        is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+        favourites
       }
     }`).then(resp => {
         setItems(removeNull(resp.data.topRated))
@@ -112,6 +118,8 @@ export function useNowPlaying(){
           release_date
           first_air_date
           media_type
+          is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+          favourites
         }
       }`).then(resp => {
           if(resp.data)
@@ -131,6 +139,8 @@ export function useNowPlaying(){
           release_date
           first_air_date
           media_type
+          is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+          favourites
         }
       }`).then(resp => {
           if(resp.data)
@@ -173,6 +183,8 @@ export function useByGenres(genres){
         release_date
         first_air_date
         media_type
+        is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+        favourites
       }
     }`).then(resp => {
         setItems(removeNull(resp.data.byGenres))
@@ -224,6 +236,8 @@ export function useMovie(movieId){
         }
         overview
         release_date
+        is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+        favourites
         similar {
           id
           name
@@ -233,6 +247,8 @@ export function useMovie(movieId){
           poster
           release_date
           first_air_date
+          is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+          favourites
         }
         credits {
           cast {
@@ -246,6 +262,8 @@ export function useMovie(movieId){
               large
               medium
             }
+            is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+            favourites
           }
           crew {
             id
@@ -258,6 +276,8 @@ export function useMovie(movieId){
               large
               medium
             }
+            is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
+            favourites
           }
         }
       }

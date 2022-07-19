@@ -1,23 +1,110 @@
 scalar MongoFilter
 scalar MongoProjection
 scalar MongoSort
+scalar MongoDocument
 
-type Query {
-  mongo(
-    dataSource: String! = "Cluster0"
-    collection: String!
-    database: String! = "tmdb"
-    filter: MongoFilter
-    projection: MongoProjection
-    sort: MongoSort
-    limit: Int
-    skip: Int
-  ): JSON
+type Doc {
+  document: JSON
+  documents: [JSON]
+}
+
+
+type Query{
+
+  """
+  saveFavourite(mediaId: String!, userId: String!): Int
+    @sequence(
+      steps: [
+        { query: "setFavourite", arguments: [{ name: "mediaId", argument: "mediaId" }, { name: "userId", argument: "userId" }] },
+        { query: "favouritesCount", arguments: [{ name: "mediaId", argument: "mediaId" }] }
+      ]
+    )
+  """
+  setFavourite(mediaId: String!, userId: String!): Doc
+    @rest(
+      endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/updateOne"
+      method: POST
+      headers: [{ name: "api-key", value: "$apiKey" }]
+      configuration: "mongo_data_config"
+      postbody: """
+        {
+          "dataSource": "Cluster0",
+          "database": "tmdb",
+          "collection": "favourite",
+          "filter": { "_id": "{{ .Get "mediaId" }}" },
+          "update": {
+              "$set": {
+                  "{{ .Get "userId" }}": true
+              }
+          },
+          "upsert": true
+      }
+      """
+    )
+
+  unFavourite(mediaId: String!, userId: String!): Doc
+    @rest(
+      endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/updateOne"
+      method: POST
+      headers: [{ name: "api-key", value: "$apiKey" }]
+      configuration: "mongo_data_config"
+      postbody: """
+        {
+          "dataSource": "Cluster0",
+          "database": "tmdb",
+          "collection": "favourite",
+          "filter": { "_id": "{{ .Get "mediaId" }}" },
+          "update": {
+              "$unset": {
+                  "{{ .Get "userId" }}": 1
+              }
+          },
+          "upsert": true
+      }
+      """
+    )
+
+  isFavourite(mediaId: String!, userId: String!): Boolean
     @rest(
       endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/findOne"
       method: POST
       headers: [{ name: "api-key", value: "$apiKey" }]
       configuration: "mongo_data_config"
-      resultroot: "documents[]"
+      postbody: """
+        {
+          "dataSource": "Cluster0",
+          "collection": "favourite",
+          "database": "tmdb",
+          "filter": { "_id": "{{ .Get "mediaId" }}", "{{ .Get "userId" }}": true }
+        }
+      """
+      ecmascript: """
+        function transformREST(s){
+            let result = JSON.parse(s);
+            return !!(result && result.document)
+        }
+      """
+    )
+
+  favouritesCount(mediaId: String!): Int
+    @rest(
+      endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/findOne"
+      method: POST
+      headers: [{ name: "api-key", value: "$apiKey" }]
+      configuration: "mongo_data_config"
+      postbody: """
+        {
+          "dataSource": "Cluster0",
+          "collection": "favourite",
+          "database": "tmdb",
+          "filter": { "_id": "{{ .Get "mediaId" }}" }
+        }
+      """
+      ecmascript: """
+        function transformREST(s){
+            let result = JSON.parse(s);
+            return (result && result.document && Object.keys(result.document).length - 1) || 0;
+        }
+      """
     )
 }

@@ -72,6 +72,8 @@ type Cast {
   character: String
   credit_id: String
   order: Int
+  is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
+  favourites: Int @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
 
 type Crew {
@@ -87,6 +89,8 @@ type Crew {
   credit_id: String
   department: String
   job: String
+  is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
+  favourites: Int @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
 
 type Credits {
@@ -119,7 +123,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/trending/$mediaType/$timeWindow"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
         {pathpattern:["results"],editor:"jq:.[]|.+={ profile: { original: \"https://image.tmdb.org/t/p/original\\(.profile_path)\", large: \"https://image.tmdb.org/t/p/w300\\(.profile_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.profile_path)\", small: \"https://image.tmdb.org/t/p/w45\\(.profile_path)\" } }"}
@@ -132,7 +135,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/$mediaType/popular"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
         {pathpattern:["results"],editor:"jq:.[]|.+={ profile: { original: \"https://image.tmdb.org/t/p/original\\(.profile_path)\", large: \"https://image.tmdb.org/t/p/w300\\(.profile_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.profile_path)\", small: \"https://image.tmdb.org/t/p/w45\\(.profile_path)\" } }"}
@@ -145,7 +147,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/$mediaType/top_rated"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
         {pathpattern:["results"],editor:"jq:.[]|.+={ profile: { original: \"https://image.tmdb.org/t/p/original\\(.profile_path)\", large: \"https://image.tmdb.org/t/p/w300\\(.profile_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.profile_path)\", small: \"https://image.tmdb.org/t/p/w45\\(.profile_path)\" } }"}
@@ -157,7 +158,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/genre/$mediaType/list"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: ON }
       resultroot: "genres[]"
     )
   byGenres(mediaType: MediaType!, genres: String): [ListItem]
@@ -165,7 +165,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/discover/$mediaType?with_genres=$genres"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
       ]

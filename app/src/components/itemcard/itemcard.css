@@ -45,3 +45,50 @@
     left: 10px;
     font-size: 32px;
 }
+
+.fav{
+    position: absolute;
+    z-index: 2;
+    top: 4px;
+    right: 4px;
+}
+
+.fav button{
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--txt-color);
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 8px;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 6px;
+    cursor: pointer;
+}
+
+.fav button .heart{
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 600,
+    'GRAD' 0,
+    'opsz' 48;
+    font-size: 20px;
+}
+
+.fav button .count{
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 12px;
+}
+
+.fav.active button{
+    background-color: var(--accent-color-3);
+    color: white;
+}
+
+.fav.active button .heart{
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48;
+}

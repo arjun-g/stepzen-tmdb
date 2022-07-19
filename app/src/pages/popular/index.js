@@ -6,8 +6,9 @@ import { Grid } from "../../components/grid";
 
 export function Popular(props){
     const popular = usePopular();
+    const query = useQuery();
      return <Page>
         <h2>Popular</h2>
-        <Grid items={popular} />
+        <Grid items={popular} mediaType={query.media} />
     </Page>
 }

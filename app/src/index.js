@@ -4,6 +4,11 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { randomString } from './utils';
+
+if(!localStorage.getItem("tmdb.userId")){
+  localStorage.setItem("tmdb.userId", randomString(7));
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

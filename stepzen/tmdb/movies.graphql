@@ -30,14 +30,15 @@ type Movie {
   video: Boolean
   vote_average: Int
   vote_count: Int
-}
 
-extend type Movie {
-    images: Images @materializer (query: "movieImages", arguments: [{name: "movieId", field: "id"}])
-    videos: [VideoLink] @materializer (query: "movieVideos", arguments: [{name: "movieId", field: "id"}])
-    credits: Credits @materializer (query: "movieCredits", arguments: [{name: "movieId", field: "id"}])
-    social: SocialLinks @materializer (query: "socialLinks", arguments: [{name: "movieId", field: "id"}])
-    similar: [ListItem] @materializer (query: "similarMovies", arguments: [{name: "movieId", field: "id"}])
+  images: Images @materializer (query: "movieImages", arguments: [{name: "movieId", field: "id"}])
+  videos: [VideoLink] @materializer (query: "movieVideos", arguments: [{name: "movieId", field: "id"}])
+  credits: Credits @materializer (query: "movieCredits", arguments: [{name: "movieId", field: "id"}])
+  social: SocialLinks @materializer (query: "socialLinks", arguments: [{name: "movieId", field: "id"}])
+  similar: [ListItem] @materializer (query: "similarMovies", arguments: [{name: "movieId", field: "id"}])
+
+  is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
+  favourites: Int @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
 
 type ListItem {
@@ -63,7 +64,11 @@ type ListItem {
   video: Boolean
   vote_average: Float
   vote_count: Int
+
+  is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
+  favourites: Int @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
+
 
 type Query {
   movie(movieId: Int!): Movie
@@ -71,14 +76,12 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/movie/$movieId"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
     )
   movieImages(movieId: Int!) : Images
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/images"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["backdrops"],editor:"jq:.[]|.+={ file: { original: \"https://image.tmdb.org/t/p/original\\(.file_path)\", large: \"https://image.tmdb.org/t/p/w1280\\(.file_path)\", medium: \"https://image.tmdb.org/t/p/w780\\(.file_path)\", small: \"https://image.tmdb.org/t/p/w300\\(.file_path)\" } }"}
         {pathpattern:["logos"],editor:"jq:.[]|.+={ file: { original: \"https://image.tmdb.org/t/p/original\\(.file_path)\", large: \"https://image.tmdb.org/t/p/w500\\(.file_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.file_path)\", small: \"https://image.tmdb.org/t/p/w92\\(.file_path)\" } }"}
@@ -90,7 +93,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/videos"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       resultroot: "results[]"
     )
   movieCredits(movieId: Int!) : Credits
@@ -98,7 +100,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/credits"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["cast"],editor:"jq:.[]|.+={ profile: { original: \"https://image.tmdb.org/t/p/original\\(.profile_path)\", large: \"https://image.tmdb.org/t/p/w300\\(.profile_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.profile_path)\", small: \"https://image.tmdb.org/t/p/w45\\(.profile_path)\" } }"}
         {pathpattern:["crew"],editor:"jq:.[]|.+={ profile: { original: \"https://image.tmdb.org/t/p/original\\(.profile_path)\", large: \"https://image.tmdb.org/t/p/w300\\(.profile_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.profile_path)\", small: \"https://image.tmdb.org/t/p/w45\\(.profile_path)\" } }"}
@@ -109,7 +110,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/similar"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
       ]
@@ -120,7 +120,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/external_ids"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       ecmascript: """
         function transformREST(s){
             let result = JSON.parse(s);
@@ -142,7 +141,6 @@ type Query {
       endpoint: "https://api.themoviedb.org/3/movie/now_playing"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
-      cachepolicy: { strategy: OFF }
       transforms: [
         {pathpattern:["results"],editor:"jq:.[]|.+={ poster: { original: \"https://image.tmdb.org/t/p/original\\(.poster_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.poster_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.poster_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.poster_path)\" } }"}
         {pathpattern:["results"],editor:"jq:.[]|.+={ media_type: \"movie\" }"}
