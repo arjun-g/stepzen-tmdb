@@ -93,7 +93,6 @@ type Crew {
   favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
 
-
 type ListItem {
   adult: Boolean
   backdrop_path: String
@@ -147,6 +146,7 @@ enum TimeWindow{
 }
 
 type Query {
+
   trending(mediaType: MediaType!, timeWindow: TimeWindow!): [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/trending/$mediaType/$timeWindow"
@@ -182,6 +182,7 @@ type Query {
       ]
       resultroot: "results[]"
     )
+
   genres(mediaType: MediaType!): [Genre]
     @rest(
       endpoint: "https://api.themoviedb.org/3/genre/$mediaType/list"
@@ -189,6 +190,7 @@ type Query {
       configuration: "curl_import_config"
       resultroot: "genres[]"
     )
+
   byGenres(mediaType: MediaType!, genres: String): [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/discover/$mediaType?with_genres=$genres"
