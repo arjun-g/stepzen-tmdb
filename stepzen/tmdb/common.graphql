@@ -72,6 +72,7 @@ type Cast {
   character: String
   credit_id: String
   order: Int
+
   is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
   favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
@@ -89,6 +90,7 @@ type Crew {
   credit_id: String
   department: String
   job: String
+
   is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
   favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
@@ -147,6 +149,9 @@ enum TimeWindow{
 
 type Query {
 
+  """
+  Get list of movies, tv shows and actors currently trending.
+  """
   trending(mediaType: MediaType!, timeWindow: TimeWindow!): [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/trending/$mediaType/$timeWindow"
@@ -159,6 +164,9 @@ type Query {
       resultroot: "results[]"
     )
   
+  """
+  Get list of popular movies, tv shows and actors.
+  """
   popular(mediaType: MediaType!): [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/$mediaType/popular"
@@ -171,6 +179,9 @@ type Query {
       resultroot: "results[]"
     )
   
+  """
+  Get list of top rated movies, tv shows and actors.
+  """
   topRated(mediaType: MediaType!): [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/$mediaType/top_rated"
@@ -183,6 +194,9 @@ type Query {
       resultroot: "results[]"
     )
 
+  """
+  Get list of genres avilable for movies or tv shows.
+  """
   genres(mediaType: MediaType!): [Genre]
     @rest(
       endpoint: "https://api.themoviedb.org/3/genre/$mediaType/list"
@@ -191,6 +205,9 @@ type Query {
       resultroot: "genres[]"
     )
 
+  """
+  Get the list of movies and tv show based on the given  genres
+  """
   byGenres(mediaType: MediaType!, genres: String): [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/discover/$mediaType?with_genres=$genres"

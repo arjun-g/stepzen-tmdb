@@ -14,6 +14,9 @@ type Count{
 
 type Query{
 
+  """
+  Works in steps. First save the media as a favourite item for the user. The return the total number of favorites a media got.
+  """
   favourite(mediaId: String!, userId: String!): Count
     @sequence(
       steps: [
@@ -22,6 +25,9 @@ type Query{
       ]
     )
 
+  """
+  Works in steps. First remove the media from user's favorite. The return the total number of favorites available now for the media.
+  """
   unfavourite(mediaId: String!, userId: String!): Count
     @sequence(
       steps: [
@@ -30,6 +36,9 @@ type Query{
       ]
     )
 
+  """
+  Mark a media as a favorite for a user. Create or update a mongo doc with mediaId as _id. Then add the userId as key.
+  """
   setFavourite(mediaId: String!, userId: String!): Doc
     @rest(
       endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/updateOne"
@@ -52,6 +61,9 @@ type Query{
       """
     )
 
+  """
+  Remove the user key from the media doc entry
+  """
   removeFavourite(mediaId: String!, userId: String!): Doc
     @rest(
       endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/updateOne"
@@ -74,6 +86,9 @@ type Query{
       """
     )
 
+  """
+  Check if a media is favourited by the user. ecmascript is used convert the result to a boolean
+  """
   isFavourite(mediaId: String!, userId: String!): Boolean
     @rest(
       endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/findOne"
@@ -96,6 +111,9 @@ type Query{
       """
     )
 
+  """
+  Get the total number of favourites got by a media. ecmascript is used to return a new Count object.
+  """
   favouritesCount(mediaId: String!): Count
     @rest(
       endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/findOne"

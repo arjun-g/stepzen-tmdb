@@ -36,6 +36,9 @@ type Movie {
 
 type Query {
 
+  """
+  Get the movie details
+  """
   movie(movieId: Int!): Movie
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId"
@@ -43,6 +46,9 @@ type Query {
       configuration: "curl_import_config"
     )
     
+  """
+  Get all the images related with the movie. Transforms is used the convert the file path to absolute url. Eg. "/9eAn20y26wtB3aet7w9lHjuSgZ3.jpg" to "https://image.tmdb.org/t/p/w1280/9eAn20y26wtB3aet7w9lHjuSgZ3.jpg"
+  """
   movieImages(movieId: Int!) : Images
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/images"
@@ -55,6 +61,9 @@ type Query {
       ]
     )
 
+  """
+  Get all videos associated with a movie
+  """
   movieVideos(movieId: Int!) : [VideoLink]
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/videos"
@@ -63,6 +72,9 @@ type Query {
       resultroot: "results[]"
     )
 
+  """
+  Get all casts and crew members of a movie.
+  """
   movieCredits(movieId: Int!) : Credits
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/credits"
@@ -74,6 +86,9 @@ type Query {
       ]
     )
 
+  """
+  Get all movies similar to the given movie
+  """
   similarMovies(movieId: Int!) : [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/similar"
@@ -85,6 +100,9 @@ type Query {
       resultroot: "results[]"
     )
 
+  """
+  Get all social media links of a given movie. ecmascript is used to get the full urls base on the id
+  """
   socialLinks(movieId: Int!): SocialLinks
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/external_ids"
@@ -107,6 +125,9 @@ type Query {
       """
     )
     
+  """
+  Get list of movies currently in theatres
+  """
   nowPlaying: [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/now_playing"

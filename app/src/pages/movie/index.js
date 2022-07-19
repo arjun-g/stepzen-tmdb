@@ -32,7 +32,7 @@ export function Movie(props){
                                 if(!movie.is_favourite){
                                     fetchGQL(`{
                                         favourite(mediaId: "${movie.id}", userId: "${localStorage.getItem("tmdb.userId")}") {
-                                        count
+                                            count
                                         }
                                     }`).then(resp => {
                                         movie.is_favourite = true;
@@ -42,7 +42,7 @@ export function Movie(props){
                                 else{
                                     fetchGQL(`{
                                         unfavourite(mediaId: "${movie.id}", userId: "${localStorage.getItem("tmdb.userId")}") {
-                                        count
+                                            count
                                         }
                                     }`).then(resp => {
                                         movie.is_favourite = false;
