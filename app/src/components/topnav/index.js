@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import "./topnav.css";
 import { usePath, useQuery } from "../../hooks";
 
@@ -14,7 +14,7 @@ export function TopNav(props){
                 <Link to={`${path}?media=tv`} className={query.media === "tv" && "active"}>TV</Link>
             </li>
             <li>
-                <Link to={`${path}?media=person`} className={query.media === "person" && "active"}>Actors</Link>
+                {(window.location.pathname === "/" || window.location.pathname === "/popular") && <Link to={`${path}?media=person`} className={query.media === "person" && "active"}>Actors</Link>}
             </li>
         </ul>
         <div className="search">

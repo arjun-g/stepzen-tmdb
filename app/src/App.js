@@ -21,18 +21,18 @@ function App() {
             <span className="title txt-bold">MENU</span>
             <ul>
               <li>
-                <Link to={"/"} className="active">
+                <Link to={"/"} className={window.location.pathname == "/" ? "active" : ""}>
                   <span className="material-symbols-outlined">home</span> Home
                 </Link>
               </li>
               <li>
-                <Link to={"/popular"}>
+                <Link to={"/popular"} className={window.location.pathname == "/popular" ? "active" : ""}>
                   <span className="material-symbols-outlined">update</span>{" "}
                   Popular
                 </Link>
               </li>
               <li>
-                <Link to={"/top-rated"}>
+                <Link to={"/top-rated"} className={window.location.pathname == "/top-rated" ? "active" : ""}>
                   <span className="material-symbols-outlined">star</span> Top
                   Rated
                 </Link>
