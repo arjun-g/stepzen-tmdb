@@ -93,6 +93,35 @@ type Crew {
   favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
 
+
+type ListItem {
+  adult: Boolean
+  backdrop_path: String
+  first_air_date: Date
+  genre_ids: [Int]
+  id: Int!
+  media_type: String
+  name: String
+  origin_country: [String]
+  original_language: String
+  original_name: String
+  original_title: String
+  overview: String
+  popularity: Float
+  poster_path: String
+  poster: JSON
+  profile_path: String
+  profile: JSON
+  release_date: Date
+  title: String
+  video: Boolean
+  vote_average: Float
+  vote_count: Int
+
+  is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
+  favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
+}
+
 type Credits {
   cast: [Cast]
   crew: [Crew]

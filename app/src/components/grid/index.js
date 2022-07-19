@@ -12,5 +12,8 @@ export function Grid({
                 return <li key={item.id}><ItemCard item={item} mediaType={mediaType} /></li>
             })}
         </ul>
+        {/* <div className="more">
+            <button>Load More</button>
+        </div> */}
     </div>
 }

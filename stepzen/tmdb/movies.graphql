@@ -1,10 +1,3 @@
-
-
-
-type SimilarMovies {
-  results: [ListItem]
-}
-
 type Movie {
   adult: Boolean
   backdrop_path: String
@@ -41,42 +34,15 @@ type Movie {
   favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
 
-type ListItem {
-  adult: Boolean
-  backdrop_path: String
-  first_air_date: Date
-  genre_ids: [Int]
-  id: Int!
-  media_type: String
-  name: String
-  origin_country: [String]
-  original_language: String
-  original_name: String
-  original_title: String
-  overview: String
-  popularity: Float
-  poster_path: String
-  poster: JSON
-  profile_path: String
-  profile: JSON
-  release_date: Date
-  title: String
-  video: Boolean
-  vote_average: Float
-  vote_count: Int
-
-  is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
-  favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
-}
-
-
 type Query {
+
   movie(movieId: Int!): Movie
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId"
       headers: [{ name: "authorization", value: "$authorization;" }]
       configuration: "curl_import_config"
     )
+    
   movieImages(movieId: Int!) : Images
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/images"
@@ -88,6 +54,7 @@ type Query {
         {pathpattern:["posters"],editor:"jq:.[]|.+={ file: { original: \"https://image.tmdb.org/t/p/original\\(.file_path)\", large: \"https://image.tmdb.org/t/p/w780\\(.file_path)\", medium: \"https://image.tmdb.org/t/p/w342\\(.file_path)\", small: \"https://image.tmdb.org/t/p/w154\\(.file_path)\" } }"}
       ]
     )
+
   movieVideos(movieId: Int!) : [VideoLink]
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/videos"
@@ -95,6 +62,7 @@ type Query {
       configuration: "curl_import_config"
       resultroot: "results[]"
     )
+
   movieCredits(movieId: Int!) : Credits
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/credits"
@@ -105,6 +73,7 @@ type Query {
         {pathpattern:["crew"],editor:"jq:.[]|.+={ profile: { original: \"https://image.tmdb.org/t/p/original\\(.profile_path)\", large: \"https://image.tmdb.org/t/p/w300\\(.profile_path)\", medium: \"https://image.tmdb.org/t/p/w185\\(.profile_path)\", small: \"https://image.tmdb.org/t/p/w45\\(.profile_path)\" } }"}
       ]
     )
+
   similarMovies(movieId: Int!) : [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/similar"
@@ -115,6 +84,7 @@ type Query {
       ]
       resultroot: "results[]"
     )
+
   socialLinks(movieId: Int!): SocialLinks
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/$movieId/external_ids"
@@ -136,6 +106,7 @@ type Query {
         }
       """
     )
+    
   nowPlaying: [ListItem]
     @rest(
       endpoint: "https://api.themoviedb.org/3/movie/now_playing"

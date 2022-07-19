@@ -3,3 +3,18 @@
     flex: 1 1 100%;
     overflow-y: auto;
 }
+
+.more{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.more button{
+    font-weight: 600;
+    padding: 4px 20px;
+    background-color: var(--accent-color-4);
+    border: 0;
+    border-radius: 4px;
+}
