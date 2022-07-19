@@ -73,7 +73,7 @@ type Cast {
   credit_id: String
   order: Int
   is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
-  favourites: Int @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
+  favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
 
 type Crew {
@@ -90,7 +90,7 @@ type Crew {
   department: String
   job: String
   is_favourite(userId: String!): Boolean @materializer (query: "isFavourite", arguments: [{name: "mediaId", field: "id"}, { name: "userId", argument: "userId" }])
-  favourites: Int @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
+  favourites: Count @materializer (query: "favouritesCount", arguments: [{name: "mediaId", field: "id"}])
 }
 
 type Credits {

@@ -34,7 +34,9 @@ export function useTrending(media){
         first_air_date
         media_type
         is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-        favourites
+        favourites{
+          count
+        }
       }
     }`).then(resp => {
         setItems(removeNull(resp.data.trending).filter(trend => {
@@ -65,7 +67,9 @@ export function usePopular(){
         first_air_date
         media_type
         is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-        favourites
+        favourites{
+          count
+        }
       }
     }`).then(resp => {
         setItems(removeNull(resp.data.popular))
@@ -91,7 +95,9 @@ export function useTopRated(){
         first_air_date
         media_type
         is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-        favourites
+        favourites{
+          count
+        }
       }
     }`).then(resp => {
         setItems(removeNull(resp.data.topRated))
@@ -119,7 +125,9 @@ export function useNowPlaying(){
           first_air_date
           media_type
           is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-          favourites
+          favourites{
+            count
+          }
         }
       }`).then(resp => {
           if(resp.data)
@@ -140,7 +148,9 @@ export function useNowPlaying(){
           first_air_date
           media_type
           is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-          favourites
+          favourites{
+            count
+          }
         }
       }`).then(resp => {
           if(resp.data)
@@ -184,7 +194,9 @@ export function useByGenres(genres){
         first_air_date
         media_type
         is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-        favourites
+        favourites{
+          count
+        }
       }
     }`).then(resp => {
         setItems(removeNull(resp.data.byGenres))
@@ -277,7 +289,9 @@ export function useMovie(movieId){
               medium
             }
             is_favourite(userId: "${localStorage.getItem("tmdb.userId")}")
-            favourites
+            favourites{
+              count
+            }
           }
         }
       }

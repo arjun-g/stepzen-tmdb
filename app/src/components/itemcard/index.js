@@ -9,7 +9,7 @@ export function ItemCard({
     className,
     mediaType
 }){
-    const [favourites, setFavourites] = useState(item.favourites);
+    const [favourites, setFavourites] = useState(item.favourites.count);
     const isPerson = item.media_type == "person" || mediaType == "person";
     return <Link to={`/${item.media_type || mediaType}/${item.id}`} className={`itemcard ${className || ""}`}>
         {item.poster_path && <img src={item.poster.medium} alt={`${item.name || item.title} Poster`} loading="lazy" />}
@@ -26,24 +26,24 @@ export function ItemCard({
             <button onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
-                if(item.is_favourite){
+                if(!item.is_favourite){
                     fetchGQL(`{
-                        unFavourite(mediaId: "${item.id}", userId: "${localStorage.getItem("tmdb.userId")}") {
-                          document
+                        favourite(mediaId: "${item.id}", userId: "${localStorage.getItem("tmdb.userId")}") {
+                          count
                         }
                       }`).then(resp => {
-                        item.is_favourite = false;
-                          setFavourites(favourites - 1);
+                        item.is_favourite = true;
+                          setFavourites(resp.data.favourite.count);
                       });
                 }
                 else{
                     fetchGQL(`{
-                        setFavourite(mediaId: "${item.id}", userId: "${localStorage.getItem("tmdb.userId")}") {
-                          document
+                        unfavourite(mediaId: "${item.id}", userId: "${localStorage.getItem("tmdb.userId")}") {
+                          count
                         }
                       }`).then(resp => {
-                        item.is_favourite = true;
-                          setFavourites(favourites + 1);
+                        item.is_favourite = false;
+                        setFavourites(resp.data.unfavourite.count);
                       });
                 }
                 

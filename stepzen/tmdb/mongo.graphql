@@ -8,18 +8,28 @@ type Doc {
   documents: [JSON]
 }
 
+type Count{
+  count: Int
+}
 
 type Query{
 
-  """
-  saveFavourite(mediaId: String!, userId: String!): Int
+  favourite(mediaId: String!, userId: String!): Count
     @sequence(
       steps: [
-        { query: "setFavourite", arguments: [{ name: "mediaId", argument: "mediaId" }, { name: "userId", argument: "userId" }] },
+        { query: "setFavourite"},
         { query: "favouritesCount", arguments: [{ name: "mediaId", argument: "mediaId" }] }
       ]
     )
-  """
+
+  unfavourite(mediaId: String!, userId: String!): Count
+    @sequence(
+      steps: [
+        { query: "removeFavourite"},
+        { query: "favouritesCount", arguments: [{ name: "mediaId", argument: "mediaId" }] }
+      ]
+    )
+
   setFavourite(mediaId: String!, userId: String!): Doc
     @rest(
       endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/updateOne"
@@ -42,7 +52,7 @@ type Query{
       """
     )
 
-  unFavourite(mediaId: String!, userId: String!): Doc
+  removeFavourite(mediaId: String!, userId: String!): Doc
     @rest(
       endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/updateOne"
       method: POST
@@ -86,7 +96,7 @@ type Query{
       """
     )
 
-  favouritesCount(mediaId: String!): Int
+  favouritesCount(mediaId: String!): Count
     @rest(
       endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/findOne"
       method: POST
@@ -103,7 +113,7 @@ type Query{
       ecmascript: """
         function transformREST(s){
             let result = JSON.parse(s);
-            return (result && result.document && Object.keys(result.document).length - 1) || 0;
+            return (result && result.document && { count: (Object.keys(result.document).length - 1) }) || { count: 0 };
         }
       """
     )
