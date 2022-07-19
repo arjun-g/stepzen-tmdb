@@ -1,8 +1,5 @@
 
-type Credits {
-  cast: [Cast]
-  crew: [Crew]
-}
+
 
 type SimilarMovies {
   results: [ListItem]

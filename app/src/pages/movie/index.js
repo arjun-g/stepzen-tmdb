@@ -40,7 +40,7 @@ export function Movie(props){
                 <h2>Cast</h2>
                 <div className="horizontal">
                     {movie.credits.cast.map(actor => {
-                        return <ItemCard item={actor} className="actor" />
+                        return <ItemCard item={actor} className="actor" mediaType={"person"} />
                     })}
                 </div>
             </div>
@@ -48,7 +48,7 @@ export function Movie(props){
                 <h2>Crew</h2>
                 <div className="horizontal">
                     {movie.credits.crew.map(person => {
-                        return <ItemCard item={person} className="person" />
+                        return <ItemCard item={person} className="person" mediaType={"person"} />
                     })}
                 </div>
             </div>
@@ -56,7 +56,7 @@ export function Movie(props){
                 <h2>Similar Movies</h2>
                 <div className="horizontal">
                     {movie.similar.map(movie => {
-                        return <ItemCard item={movie} className="movie" />
+                        return <ItemCard item={movie} className="movie" mediaType={"movie"} />
                     })}
                 </div>
             </div>

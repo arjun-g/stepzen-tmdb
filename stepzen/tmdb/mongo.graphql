@@ -1,0 +1,23 @@
+scalar MongoFilter
+scalar MongoProjection
+scalar MongoSort
+
+type Query {
+  mongo(
+    dataSource: String! = "Cluster0"
+    collection: String!
+    database: String! = "tmdb"
+    filter: MongoFilter
+    projection: MongoProjection
+    sort: MongoSort
+    limit: Int
+    skip: Int
+  ): JSON
+    @rest(
+      endpoint: "https://data.mongodb-api.com/app/data-dqvbs/endpoint/data/v1/action/findOne"
+      method: POST
+      headers: [{ name: "api-key", value: "$apiKey" }]
+      configuration: "mongo_data_config"
+      resultroot: "documents[]"
+    )
+}

@@ -7,11 +7,12 @@ export function ItemCard({
     className,
     mediaType
 }){
+    const isPerson = item.media_type == "person" || mediaType == "person";
     return <Link to={`/${item.media_type || mediaType}/${item.id}`} className={`itemcard ${className || ""}`}>
         {item.poster_path && <img src={item.poster.medium} alt={`${item.name || item.title} Poster`} loading="lazy" />}
-        {item.profile_path && <img src={item.profile.medium} alt={`${item.name || item.title} Photo`} loading="lazy" />}
+        {isPerson && <img src={item.profile.medium} alt={`${item.name || item.title} Photo`} loading="lazy" />}
         <div className="content glass-background" style={{ paddingLeft: !item.profile_path ? "50px" : "" }}>
-            {!item.profile_path && <span className="material-symbols-outlined material-symbols-filled play">play_circle</span>}
+            {!isPerson && <span className="material-symbols-outlined material-symbols-filled play">play_circle</span>}
             <span className="title">{item.name || item.title}</span>
             {item.release_date && <span className="year">{dayjs(item.release_date).format("YYYY")}</span>}
             {item.first_air_date && <span className="year">{dayjs(item.first_air_date).format("YYYY")}-</span>}

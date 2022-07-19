@@ -89,6 +89,11 @@ type Crew {
   job: String
 }
 
+type Credits {
+  cast: [Cast]
+  crew: [Crew]
+}
+
 type SocialLinks{
     imdb: String
     facebook: String

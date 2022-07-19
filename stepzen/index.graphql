@@ -4,6 +4,7 @@ schema
       "tmdb/common.graphql",
       "tmdb/movies.graphql",
       "tmdb/tv.graphql",
+      "tmdb/mongo.graphql",
       "tmdb/index.graphql"
     ]
   ) {

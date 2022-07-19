@@ -9,6 +9,7 @@ import { Popular } from "./pages/popular";
 import { TopRated } from "./pages/toprated";
 import { ByGenre } from "./pages/genres";
 import { ItemCard } from "./components/itemcard";
+import { LinkWithQuery } from "./utils";
 
 function App() {
   const nowPlaying = useNowPlaying();
@@ -21,15 +22,15 @@ function App() {
             <span className="title txt-bold">MENU</span>
             <ul>
               <li>
-                <Link to={"/"} className={window.location.pathname == "/" ? "active" : ""}>
+                <LinkWithQuery to={"/"} className={window.location.pathname == "/" ? "active" : ""}>
                   <span className="material-symbols-outlined">home</span> Home
-                </Link>
+                </LinkWithQuery>
               </li>
               <li>
-                <Link to={"/popular"} className={window.location.pathname == "/popular" ? "active" : ""}>
+                <LinkWithQuery to={"/popular"} className={window.location.pathname == "/popular" ? "active" : ""}>
                   <span className="material-symbols-outlined">update</span>{" "}
                   Popular
-                </Link>
+                </LinkWithQuery>
               </li>
               <li>
                 <Link to={"/top-rated"} className={window.location.pathname == "/top-rated" ? "active" : ""}>
