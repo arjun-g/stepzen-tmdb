@@ -1,5 +1,7 @@
 configurationset:
   - configuration:
       name: curl_import_config
-      authorization: Bearer
-        <AUTH TOKEN HERE>
+      authorization: Bearer <TMDB Auth Key>
+  - configuration:
+      name: mongo_data_config
+      apiKey: <MongoDB Atlas API Key>
